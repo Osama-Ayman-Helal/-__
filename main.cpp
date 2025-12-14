@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <filesystem>
 #include <vector>
@@ -31,24 +32,26 @@ void removeFile(const string& path) {
 
 // --- Huffman Compression Logic ---
 void compressRawFile(const string& inputFile, const string& outputFile) {
-    cout << "  [Step 2] Frequency Analysis..." << endl;
+    cout << YELLOW;
+    cout << "  [Step 2] Frequency Analysis..." << RESET << endl;
     FrequencyMap fMap;
     auto freqs = fMap.buildFrequencyMap(inputFile);
     // Huffman functions expect a std::map; convert unordered_map -> map
     std::map<unsigned char, int> freqMap(freqs.begin(), freqs.end());
 
-    cout << "  [Step 3] Building Huffman Tree..." << endl;
+    cout << YELLOW;
+    cout << "  [Step 3] Building Huffman Tree..." << RESET << endl;
     HuffmanNode* root = buildTree(freqMap);
 
     map<unsigned char, string> codes;
     buildCodeTable(root, "", codes);
 
-    cout << "  [Step 4] Writing Compressed File..." << endl;
+    cout << YELLOW;
+    cout << "  [Step 4] Writing Compressed File..." << RESET << endl;
     ofstream outFile(outputFile, ios::binary);
-    if (!outFile) {
-        cerr << "Error: Cannot create output file " << outputFile << endl;
-        return;
-    }
+    if (!outFile)
+        throw runtime_error("Cannot create output file " + outputFile);
+
 
     // A. Write Header (Frequency Map)
     HeaderManager headerMgr;
@@ -79,12 +82,12 @@ void compressRawFile(const string& inputFile, const string& outputFile) {
 
 // --- Huffman Decompression Logic ---
 void decompressRawFile(const string& inputFile, const string& outputFile) {
-    cout << "  [Step 1] Reading Header & Rebuilding Tree..." << endl;
+    cout << YELLOW;
+    cout << "  [Step 1] Reading Header & Rebuilding Tree..." << RESET << endl;
     ifstream inFile(inputFile, ios::binary);
-    if (!inFile) {
-        cerr << "Error: Cannot open input file " << inputFile << endl;
-        return;
-    }
+    if (!inFile) 
+        throw runtime_error("Cannot open input file " + inputFile);
+ 
 
     // A. Read Header
     HeaderManager headerMgr;
@@ -98,7 +101,8 @@ void decompressRawFile(const string& inputFile, const string& outputFile) {
     inFile.read(reinterpret_cast<char*>(&expectedSize), sizeof(expectedSize));
 
     // C. Decode Body
-    cout << "  [Step 2] Decoding..." << endl;
+    cout << YELLOW;
+    cout << "  [Step 2] Decoding..." << RESET << endl;
     ofstream outFile(outputFile, ios::binary);
     BitReader bReader(inFile);
 
@@ -133,7 +137,8 @@ void runCompress(const string& inputPath, const string& outputPath) {
 
     // 1. ARCHIVE (Packer)
     // Always pack, even if it's a single file. This preserves filenames.
-    cout << "Phase 1: Archiving..." << endl;
+    cout << YELLOW ;
+    cout << "Phase 1: Archiving..." << RESET << endl;
     Packer packer;
     vector<string> files;
 
@@ -147,23 +152,27 @@ void runCompress(const string& inputPath, const string& outputPath) {
     packer.packFiles(files, tempArchive);
 
     // 2. COMPRESS (Huffman)
-    cout << "Phase 2: Compressing..." << endl;
+    cout << YELLOW;
+    cout << "Phase 2: Compressing..." << RESET << endl;
     compressRawFile(tempArchive, outputPath);
 
     // Cleanup
     removeFile(tempArchive);
-    cout << "Success! Created " << outputPath << endl;
+    cout << GREEN_BACKGROUND << BLACK;
+    cout << "Success! Created " << outputPath << RESET << endl;
 }
 
 void runDecompress(const string& inputPath, const string& outputDir) {
     string tempArchive = "temp_unpack.blob";
 
     // 1. DECOMPRESS (Huffman)
-    cout << "Phase 1: Decompressing..." << endl;
+    cout << YELLOW;
+    cout << "Phase 1: Decompressing..." << RESET << endl;
     decompressRawFile(inputPath, tempArchive);
 
     // 2. UNPACK (Packer)
-    cout << "Phase 2: Unpacking..." << endl;
+    cout << YELLOW;
+    cout << "Phase 2: Unpacking..." << RESET << endl;
     Packer packer;
     // Ensure output directory exists
     if (!fs::exists(outputDir)) {
@@ -173,7 +182,8 @@ void runDecompress(const string& inputPath, const string& outputDir) {
 
     // Cleanup
     removeFile(tempArchive);
-    cout << "Success! Extracted to " << outputDir << endl;
+    cout << GREEN_BACKGROUND << BLACK;
+    cout << "Success! Extracted to " << outputDir << RESET << endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -193,10 +203,12 @@ int main(int argc, char* argv[]) {
         } else if (flag == "-x") {
             runDecompress(input, output);
         } else {
-            cout << "Unknown flag: " << flag << endl;
+            cerr << RED_BACKGROUND << BLACK;
+            cerr << "Unknown flag: " << flag << RESET << endl;
         }
     } catch (const exception& e) {
-        cerr << "Runtime Error: " << e.what() << endl;
+        cerr << RED_BACKGROUND << BLACK;
+        cerr << "Runtime Error: " << e.what() << RESET << endl;
         return 1;
     }
 

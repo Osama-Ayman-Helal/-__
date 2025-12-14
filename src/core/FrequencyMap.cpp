@@ -7,10 +7,8 @@ std::unordered_map<unsigned char, int>
 FrequencyMap::buildFrequencyMap(const std::string& filePath) {
     std::unordered_map<unsigned char, int> map;
     std::ifstream file(filePath, std::ios::binary);
-    if (!file) {
-        std::cerr << "[Error] Cannot open file: " << filePath << std::endl;
-        return map;
-    }
+    if (!file)
+        throw std::runtime_error("Cannot open file: " + filePath);
 
     const size_t CHUNK_SIZE = 8192;
     std::vector<char> buffer(CHUNK_SIZE);

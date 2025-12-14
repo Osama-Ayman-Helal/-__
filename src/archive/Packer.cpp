@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include "../io/ui.h"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -10,10 +11,8 @@ void Packer::packFiles(const vector<string> &files, const string &outputFile)
 {
     ofstream out(outputFile, ios::binary);
     if (!out.is_open())
-    {
-        cout << "Error: Could not create archive file " << outputFile << endl;
-        return;
-    }
+        throw runtime_error("Could not create archive file " + outputFile);
+
 
     for (const auto &filePath : files)
     {
@@ -21,7 +20,8 @@ void Packer::packFiles(const vector<string> &files, const string &outputFile)
 
         if (!fs::exists(p))
         {
-            cout << "Warning: File skipped (not found): " << filePath << endl;
+            cout << RED_BACKGROUND << BLACK;
+            cout << "Warning: File skipped (not found): " << filePath << RESET << endl;
             continue;
         }
 
@@ -44,22 +44,22 @@ void Packer::packFiles(const vector<string> &files, const string &outputFile)
         }
         else
         {
-             cout << "Warning: Could not read content of: " << filePath << endl;
+             cout << RED_BACKGROUND << BLACK;
+             cout << "Warning: Could not read content of: " << filePath << BLACK << endl;
         }
     }
 
     out.close();
-    cout << "Packing complete: " << outputFile << endl;
+    cout << GREEN_BACKGROUND << BLACK;
+    cout << "Packing complete: " << outputFile << RESET << endl;
 }
 
 void Packer::unpackFiles(const string &inputFile, const string &outputDir)
 {
     ifstream in(inputFile, ios::binary);
     if (!in.is_open())
-    {
-        cout << "Error: Could not open archive: " << inputFile << endl;
-        return;
-    }
+        throw runtime_error("Could not open archive " + inputFile);
+
 
     // Ensure the output root directory exists
     if (!fs::exists(outputDir)) {
@@ -93,7 +93,8 @@ void Packer::unpackFiles(const string &inputFile, const string &outputDir)
 
         ofstream out(destPath, ios::binary);
         if (!out.is_open()) {
-            cout << "Error: Could not create output file: " << destPath << endl;
+            cout << RED_BACKGROUND << BLACK;
+            cout << "Error: Could not create output file: " << destPath << RESET << endl;
             // Skip the bytes of this file so we can try the next one
             in.seekg(fileSize, ios::cur);
             continue;

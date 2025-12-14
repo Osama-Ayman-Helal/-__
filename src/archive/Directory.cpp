@@ -1,13 +1,11 @@
 #include "Directory.h"
 #include <filesystem>
-#include <iostream>
 
 namespace fs = std::filesystem;
 
 std::vector<std::string> DirectoryCrawler::getAllFiles(const std::string& rootPath) {
     std::vector<std::string> files;
     //  Recursive implementation
-    try {           //عشان لو اتبعت pathمش موجود بالفعل(مشاكل)
 
         // Loop through directory recursively
 
@@ -16,10 +14,6 @@ std::vector<std::string> DirectoryCrawler::getAllFiles(const std::string& rootPa
                 files.push_back(entry.path().generic_string());  //هيضيفه للvector بتاعي علي هيئة path (to string->totally)
             }
         }
-    }
-    catch (const std::exception& e) {
-        std::cout << "Directory Error: " << e.what() << std::endl;   //.what-> to return characters
-    }
 
     return files;
 }
