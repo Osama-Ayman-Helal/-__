@@ -26,4 +26,4 @@ std::pair<std::string, std::map<unsigned char, int>> encodeString(const std::str
 std::string decodedString(const std::string &encodedString,
                           std::map<unsigned char, int> freq);
 
-#endif // HUFFMAN_H
+#endif

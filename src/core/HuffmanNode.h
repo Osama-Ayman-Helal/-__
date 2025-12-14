@@ -1,8 +1,7 @@
 #pragma once
-#include <cstddef> // for nullptr
+#include <cstddef>
 
-// SHARED STRUCTURE
-struct HuffmanNode { // Renamed from Node to match .cpp usage
+struct HuffmanNode {
     unsigned char character;
     int frequency;
     HuffmanNode *left;
@@ -11,11 +10,11 @@ struct HuffmanNode { // Renamed from Node to match .cpp usage
     // Leaf node constructor
     HuffmanNode(unsigned char c, int f) : character(c), frequency(f), left(nullptr), right(nullptr) {}
 
-    // Internal node constructor (Missing in original)
+    // Internal node constructor
     HuffmanNode(unsigned char c, int f, HuffmanNode* l, HuffmanNode* r) : character(c), frequency(f), left(l), right(r) {}
 };
 
-// SHARED COMPARATOR (For Priority Queue)
+// For Priority Queue
 struct CompareNode {
     bool operator()(HuffmanNode* l, HuffmanNode* r) {
         // Min-Heap: Returns true if l > r, putting the smallest frequency at the top
