@@ -22,21 +22,9 @@ Run (examples)
 # Compress a single file
 .\LoseRAR.exe -c .\test.txt .\test.ohz
 
-# Extract archive into a directory
+## Extract archive into a directory
+```
 .\LoseRAR.exe -x .\test.ohz .\out
-
-GUI wrapper
-```
-# Requirements: Python 3.x with tkinter (usually included on Windows)
-# Run this script from PowerShell or command prompt
-python tools\lose_rar_gui.py
-```
-
-The GUI will attempt to locate `LoseRAR.exe` in the current working directory and `cmake-build-debug` automatically. If you built the executable elsewhere, click "Browse" and select the executable file.
-
-On Windows you can also run the convenience script:
-```
-powershell -File tools\run_gui.ps1
 ```
 ```
 
