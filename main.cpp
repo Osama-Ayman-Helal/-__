@@ -13,6 +13,7 @@
 #include "src/io/BitReader.h"
 #include "src/io/HeaderManager.h"
 #include "src/io/FileReader.h"
+#include "src/io/ui.h"
 
 // ARCHIVE
 #include "src/archive/Packer.h"
