@@ -186,10 +186,39 @@ void runDecompress(const string& inputPath, const string& outputDir) {
     cout << "Success! Extracted to " << outputDir << RESET << endl;
 }
 
+bool isHelp(string option){
+    return option == "-h" || option == "--help";
+}
+
+bool isCompress(string option){
+    return option == "-c" || option == "--compress";
+}
+
+bool isExtract(string option){
+    return option == "-x" || option == "--extract";
+}
+
+void printHelp(){
+    cout << "All Options:\n\n"
+            "  -c, --compress    compress into .ohz file\n"
+            "  -x, --extract     extract .ohz file\n"
+      << endl;
+
+}
+
+void printUsage(string programName){
+    cout << "Usage: " << programName << " [flag] [input] [output]" << endl;
+    cout << "Type " << programName << " --help to see all flags" << endl;
+}
+
 int main(int argc, char* argv[]) {
+    if (argc == 2 && isHelp(argv[1])){
+        printHelp();
+        return 0;
+    }
+
     if (argc < 4) {
-        cout << "Usage: ./LoseRAR [flag] [input] [output]" << endl;
-        cout << "Flags: -c (Compress), -x (Extract)" << endl;
+        printUsage(argv[0]);
         return 1;
     }
 
@@ -198,13 +227,14 @@ int main(int argc, char* argv[]) {
     string output = argv[3];
 
     try {
-        if (flag == "-c") {
+        if (isCompress(flag)) {
             runCompress(input, output);
-        } else if (flag == "-x") {
+        } else if (isExtract(flag)) {
             runDecompress(input, output);
         } else {
             cerr << RED_BACKGROUND ;
             cerr << "Unknown flag: " << flag << RESET << endl;
+            return 1;
         }
     } catch (const exception& e) {
         cerr << RED_BACKGROUND ;
