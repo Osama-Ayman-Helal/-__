@@ -20,7 +20,7 @@ void Packer::packFiles(const vector<string> &files, const string &outputFile)
 
         if (!fs::exists(p))
         {
-            cout << RED_BACKGROUND << BLACK;
+            cout << RED_BACKGROUND ;
             cout << "Warning: File skipped (not found): " << filePath << RESET << endl;
             continue;
         }
@@ -44,8 +44,8 @@ void Packer::packFiles(const vector<string> &files, const string &outputFile)
         }
         else
         {
-             cout << RED_BACKGROUND << BLACK;
-             cout << "Warning: Could not read content of: " << filePath << BLACK << endl;
+             cout << RED_BACKGROUND;
+             cout << "Warning: Could not read content of: " << filePath << RESET << endl;
         }
     }
 
@@ -93,7 +93,7 @@ void Packer::unpackFiles(const string &inputFile, const string &outputDir)
 
         ofstream out(destPath, ios::binary);
         if (!out.is_open()) {
-            cout << RED_BACKGROUND << BLACK;
+            cout << RED_BACKGROUND ;
             cout << "Error: Could not create output file: " << destPath << RESET << endl;
             // Skip the bytes of this file so we can try the next one
             in.seekg(fileSize, ios::cur);

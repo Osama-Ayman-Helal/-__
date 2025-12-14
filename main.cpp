@@ -203,11 +203,11 @@ int main(int argc, char* argv[]) {
         } else if (flag == "-x") {
             runDecompress(input, output);
         } else {
-            cerr << RED_BACKGROUND << BLACK;
+            cerr << RED_BACKGROUND ;
             cerr << "Unknown flag: " << flag << RESET << endl;
         }
     } catch (const exception& e) {
-        cerr << RED_BACKGROUND << BLACK;
+        cerr << RED_BACKGROUND ;
         cerr << "Runtime Error: " << e.what() << RESET << endl;
         return 1;
     }
