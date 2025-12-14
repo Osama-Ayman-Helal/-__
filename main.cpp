@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <vector>
 #include <fstream>
+#include <chrono>
 
 // CORE
 #include "src/core/FrequencyMap.h"
@@ -226,9 +227,13 @@ int main(int argc, char* argv[]) {
     string input = argv[2];
     string output = argv[3];
 
+    bool printCompress = 0;
+    auto start = chrono::system_clock::now();
+
     try {
         if (isCompress(flag)) {
             runCompress(input, output);
+            printCompress = 1;
         } else if (isExtract(flag)) {
             runDecompress(input, output);
         } else {
@@ -242,5 +247,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    auto end = chrono::system_clock::now();
+    chrono::duration<double> time = end - start;
+
+    if (printCompress)
+      cout << "zipping time: ";
+    else
+      cout << "extracting time: ";
+
+    cout << time.count() << " seconds" << endl;
     return 0;
 }
