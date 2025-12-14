@@ -1,16 +1,16 @@
+#include "Huffman.h"
 #include "HuffmanNode.h"
-#include "Huffman.h" // Fixed missing extension
+#include <iostream>
 #include <map>
 #include <queue>
 #include <string>
-#include <iostream>
 
 using namespace std;
 
 map<unsigned char, int> calculateFrequency(const string &s) {
     map<unsigned char, int> freq;
     for (char ch : s)
-        freq[static_cast<unsigned char>(ch)]++; // Cast to unsigned for safety
+        freq[static_cast<unsigned char>(ch)]++;
 
     return freq;
 }
@@ -31,8 +31,8 @@ HuffmanNode *buildTree(map<unsigned char, int> freq) {
         HuffmanNode *left = pq.top();
         pq.pop();
 
-        // 4-arg constructor now exists in HuffmanNode.h
-        pq.push(new HuffmanNode('\0', right->frequency + left->frequency, left, right));
+        pq.push(new HuffmanNode('\0', right->frequency + left->frequency, left,
+                                right));
     }
 
     return pq.top();
@@ -73,7 +73,7 @@ pair<string, map<unsigned char, int>> encodeString(const string &s) {
     buildCodeTable(root, "", charactersCodes);
 
     string encoded = "";
-    // encoded.reserve(8 * s.length()); // Optional optimization
+    encoded.reserve(4 * s.length()); // Avoid using realloc() repeatedly
     for (char ch : s) {
         encoded += charactersCodes[static_cast<unsigned char>(ch)];
     }
