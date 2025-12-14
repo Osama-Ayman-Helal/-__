@@ -1,4 +1,4 @@
-#include "Huffman.h" // Fixed missing extension
+#include "Huffman.h"
 #include "HuffmanNode.h"
 #include <iostream>
 #include <map>
